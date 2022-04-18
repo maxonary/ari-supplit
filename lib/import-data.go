@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"bufio"
@@ -9,19 +9,17 @@ import (
 	"os"
 )
 
-var inputFile = "./material/sneaker-numbers.csv"
-
-func main() {
-	fmt.Println("hello world")
+func ReadInputCsv(inputFile string) []string {
 
 	csvFile, err := os.Open(inputFile)
+	var csvList []string
 
 	if err != nil {
 
 		log.Fatal(err)
 	}
 
-	// LazyQuotes implementation from https://stackoverflow.com/questions/31326659/golang-csv-error-bare-in-non-quoted-field
+	// LazyQuotes implementation to remove characters from https://stackoverflow.com/questions/31326659/golang-csv-error-bare-in-non-quoted-field
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	reader.Comma = ';'
 	reader.LazyQuotes = true
@@ -40,6 +38,8 @@ func main() {
 
 		for value := range record {
 			fmt.Printf("%s\n", record[value])
+			csvList = append(csvList, record[value])
 		}
 	}
+	return csvList
 }
